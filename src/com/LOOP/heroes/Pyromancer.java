@@ -34,10 +34,8 @@ public class Pyromancer extends Hero implements Modificator {
     @Override
     public void action(final Hero aggressor, final Hero victim, final Map area) {
         fireblast(aggressor, victim, area);
-        if (victim.getHp() == 0) {
-            return;
-        }
         ignite(aggressor, victim, area);
+        // O sa fac o functie pentru calcularea xp-ului
     }
 
     public void fireblast(final Hero aggressor, final Hero victim, final Map area) {
@@ -47,12 +45,14 @@ public class Pyromancer extends Hero implements Modificator {
         if (area.getType().equals("Volcanic")) {
             hp = hp * area.getModificator();
         }
+        if (victim instanceof Wizard) {
+            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+        }
         float[] modificators = {Rogue.Constants.MODIFICATOR_FIREBLAST, Knight.Constants.
                 MODIFICATOR_FIREBLAST, Constants.MODIFICATOR_FIREBLAST, Wizard.Constants.
                 MODIFICATOR_FIREBLAST};
         hp = hp * victim.accept(new Append(), modificators);
         /*
-        * victim.accept(new ModificatorVisitor);
         * Ma duc in alta clasa (de exemplu, modificator)
         * Stiu ca este fireblast, deci nu mai trebuie sa verific asta
         * Clasa in care ma duc este, de fapt, o interfata care implementeaza toate functiile
@@ -60,18 +60,8 @@ public class Pyromancer extends Hero implements Modificator {
         * Imi trebuie o clasa unde sunt implementate toate visit-urile
         * Clasele in care fac accept -> visit sunt chiar aceste clase din hero.
         * Se face override la accept si la visit
-        *
         * */
-        hp = Math.round(hp);
-        victim.setHp(victim.getHp() - (int)hp);
-        if(victim.getHp() <= 0) {
-            victim.setHp(0);
-            int xp = aggressor.getXp();
-            xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
-            aggressor.setXp(xp);
-            levelUp(aggressor);
-            aggressor.setHp(GeneralConstants.INITIAL_HP_PYROMANCER + aggressor.getLevel() * 50);
-        }
+        victim.setHp(victim.getHp() - Math.round(hp));
     }
 
     public void ignite(final Hero aggressor, final Hero victim, final Map area) {
@@ -82,20 +72,28 @@ public class Pyromancer extends Hero implements Modificator {
         if (area.getType().equals("Volcanic")) {
             hp = hp * area.getModificator();
         }
+        if (victim instanceof Wizard) {
+            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+        }
         float[] modificators = {Rogue.Constants.MODIFICATOR_IGNITE, Knight.Constants.
                 MODIFICATOR_IGNITE, Constants.MODIFICATOR_IGNITE, Wizard.Constants.
                 MODIFICATOR_IGNITE};
         hp = hp * victim.accept(new Append(), modificators);
-        hp = Math.round(hp);
-        victim.setHp(victim.getHp() - (int)hp);
-        if(victim.getHp() <= 0) {
+        victim.setDamageOvertime(PyromancerConstants.BASE_DAMAGE_PER_ROUND_IGNITE +
+                PyromancerConstants.ADDED_DAMAGE_PER_ROUND_IGNITE * aggressor.getLevel());
+        victim.setHp(victim.getHp() - Math.round(hp));
+        if (victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();
             xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
             aggressor.setXp(xp);
+            int level = aggressor.getLevel();
             levelUp(aggressor);
-            aggressor.setHp(GeneralConstants.INITIAL_HP_PYROMANCER + aggressor.getLevel() *
-                    GeneralConstants.ADDED_HP_PYROMANCER);
+            if (aggressor.getLevel() != level) {
+                aggressor.setHp(GeneralConstants.INITIAL_HP_PYROMANCER + aggressor.getLevel() * 50);
+                aggressor.setMaximumHp(GeneralConstants.INITIAL_HP_PYROMANCER + aggressor.getLevel() *
+                        50);
+            }
         }
     }
 }

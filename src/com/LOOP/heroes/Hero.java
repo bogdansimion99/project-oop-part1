@@ -8,7 +8,11 @@ public class Hero {
     private int xp;
     private int level;
     private int[] position;
-    private String type;
+    // for multiple actions
+    private int overtime;
+    private int damageOvertime;
+    // for Drain and Execute
+    private int maximumHp;
 
     /**
      * @return
@@ -66,12 +70,40 @@ public class Hero {
         this.position = position;
     }
 
-    public String getType() {
-        return type;
+    /**
+     * @return
+     */
+    public int getOvertime() {
+        return overtime;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    /**
+     * @param overtime
+     */
+    public void setOvertime(int overtime) {
+        this.overtime = overtime;
+    }
+
+    /**
+     * @return
+     */
+    public int getDamageOvertime() {
+        return damageOvertime;
+    }
+
+    /**
+     * @param damageOvertime
+     */
+    public void setDamageOvertime(int damageOvertime) {
+        this.damageOvertime = damageOvertime;
+    }
+
+    public int getMaximumHp() {
+        return maximumHp;
+    }
+
+    public void setMaximumHp(int maximumHp) {
+        this.maximumHp = maximumHp;
     }
 
     public Hero() {
@@ -79,15 +111,19 @@ public class Hero {
         this.level = 0;
         this.xp = 0;
         this.position = new int[]{0, 0};
-        this.type = "";
+        this.overtime = 0;
+        this.damageOvertime = 0;
+        this.maximumHp = 0;
     }
 
-    public Hero(final int hp, final int[] position/*, final String type*/) {
+    public Hero(final int hp, final int[] position) {
         this.hp = hp;
         this.xp = 0;
         this.level = 0;
         this.position = position;
-        this.type = type;
+        this.overtime = 0;
+        this.damageOvertime = 0;
+        this.maximumHp = hp;
     }
 
     public void levelUp(final Hero player) {

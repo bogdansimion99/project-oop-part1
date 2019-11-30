@@ -39,6 +39,18 @@ public class Knight extends Hero implements Modificator {
 
     public void execute (final Hero aggressor, final Hero victim, final Map area) {
         // Trebuie sa fac acea limita
+        if (victim.getHp() < victim.getMaximumHp() * Math.min(KnightConstants.INITIAL_HP_LIMIT +
+                KnightConstants.ADDED_HP_LIMIT * aggressor.getLevel(), KnightConstants.
+                MAXIMUM_HP_LIMIT)) {
+            victim.setHp(0);
+            int xp = aggressor.getXp();
+            xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
+            aggressor.setXp(xp);
+            levelUp(aggressor);
+            aggressor.setHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel() *
+                    GeneralConstants.ADDED_HP_KNIGHT);
+            return;
+        }
         float hp = 0;
         hp = KnightConstants.BASE_DAMAGE_EXECUTE + KnightConstants.ADDED_DAMAGE_EXECUTE
                 * aggressor.getLevel();
@@ -49,17 +61,7 @@ public class Knight extends Hero implements Modificator {
                 MODIFICATOR_EXECUTE, Pyromancer.Constants.MODIFICATOR_EXECUTE, Wizard.Constants.
                 MODIFICATOR_EXECUTE};
         hp = hp * victim.accept(new Append(), modificators);
-        hp = Math.round(hp);
-        victim.setHp(victim.getHp() - (int)hp);
-        if(victim.getHp() <= 0) {
-            victim.setHp(0);
-            int xp = aggressor.getXp();
-            xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
-            aggressor.setXp(xp);
-            levelUp(aggressor);
-            aggressor.setHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel() *
-                    GeneralConstants.ADDED_HP_KNIGHT);
-        }
+        victim.setHp(victim.getHp() - Math.round(hp));
     }
 
     public void slam (final Hero aggressor, final Hero victim, final Map area) {
@@ -74,8 +76,9 @@ public class Knight extends Hero implements Modificator {
                 MODIFICATOR_SLAM, Pyromancer.Constants.MODIFICATOR_SLAM, Wizard.Constants.
                 MODIFICATOR_SLAM};
         hp = hp * victim.accept(new Append(), modificators);
-        hp = Math.round(hp);
-        victim.setHp(victim.getHp() - (int)hp);
+        victim.setOvertime(KnightConstants.NO_ROUND_PARALYSIS);
+        victim.setDamageOvertime(0);
+        victim.setHp(victim.getHp() - Math.round(hp));
         if(victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();
