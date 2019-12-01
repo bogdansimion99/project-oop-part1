@@ -1,4 +1,4 @@
-package com.LOOP.maps;
+package maps;
 
 public class Map {
     private float modificator;

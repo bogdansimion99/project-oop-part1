@@ -1,7 +1,7 @@
-package com.LOOP.heroes;
+package heroes;
 
-import com.LOOP.helpers.*;
-import com.LOOP.maps.Map;
+import helpers.*;
+import maps.Map;
 
 public class Pyromancer extends Hero implements Modificator {
     private Hero pyromancer;
@@ -11,7 +11,7 @@ public class Pyromancer extends Hero implements Modificator {
     }
 
     public Pyromancer(Hero pyromancer, int[] position) {
-        super(GeneralConstants.INITIAL_HP_PYROMANCER, position/*, "Pyromancer"*/);
+        super(GeneralConstants.INITIAL_HP_PYROMANCER, position, "Pyromancer");
         this.pyromancer = pyromancer;
     }
 

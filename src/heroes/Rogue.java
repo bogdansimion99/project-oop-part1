@@ -1,7 +1,7 @@
-package com.LOOP.heroes;
+package heroes;
 
-import com.LOOP.helpers.*;
-import com.LOOP.maps.Map;
+import helpers.*;
+import maps.Map;
 
 public class Rogue extends Hero implements Modificator {
     private Hero rogue;
@@ -20,7 +20,7 @@ public class Rogue extends Hero implements Modificator {
     }
 
     public Rogue(Hero rogue, int[] position) {
-        super(GeneralConstants.INITIAL_HP_ROGUE, position);
+        super(GeneralConstants.INITIAL_HP_ROGUE, position, "Rogue");
         this.rogue = rogue;
         this.critical = 0;
     }
@@ -51,16 +51,19 @@ public class Rogue extends Hero implements Modificator {
         //trebuie sa vad daca si cand sa fac critical
         float hp = RogueConstants.INITIAL_DAMAGE_BACKSTAB + RogueConstants.ADDED_DAMAGE_BACKSTAB *
                 aggressor.getLevel();
-        if (((Rogue)aggressor).critical % 3 == 0 && area.getType().equals("Woods")) {
+        if ((((Rogue)aggressor).critical - 1) % 3 == 0 && area.getType().equals("Woods")) {
             hp = hp * RogueConstants.CRITICAL;
         }
         ((Rogue)aggressor).critical++;
         if (area.getType().equals("Woods")) {
             hp = hp * GeneralConstants.WOODS_MODIFICATOR;
         }
-        float[] modificators = {Rogue.Constants.MODIFICATOR_DEFLECT, Knight.Constants.
-                MODIFICATOR_DEFLECT, Pyromancer.Constants.MODIFICATOR_DEFLECT, Wizard.Constants.
-                MODIFICATOR_DEFLECT};
+        if (victim instanceof Wizard) {
+            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+        }
+        float[] modificators = {Constants.MODIFICATOR_BACKSTAB, Knight.Constants.
+                MODIFICATOR_BACKSTAB, Pyromancer.Constants.MODIFICATOR_BACKSTAB, Wizard.Constants.
+                MODIFICATOR_BACKSTAB};
         hp = hp * victim.accept(new Append(), modificators);
         victim.setHp(victim.getHp() - Math.round(hp));
     }
@@ -74,9 +77,12 @@ public class Rogue extends Hero implements Modificator {
             victim.setOvertime(RogueConstants.OVERTIME_PARALYSIS_WOODS);
         }
         victim.setOvertime(RogueConstants.OVERTIME_PARALYSIS);
-        float[] modificators = {Rogue.Constants.MODIFICATOR_DEFLECT, Knight.Constants.
-                MODIFICATOR_DEFLECT, Pyromancer.Constants.MODIFICATOR_DEFLECT, Wizard.Constants.
-                MODIFICATOR_DEFLECT};
+        if (victim instanceof Wizard) {
+            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+        }
+        float[] modificators = {Constants.MODIFICATOR_PARALYSIS, Knight.Constants.
+                MODIFICATOR_PARALYSIS, Pyromancer.Constants.MODIFICATOR_PARALYSIS, Wizard.Constants.
+                MODIFICATOR_PARALYSIS};
         hp = hp * victim.accept(new Append(), modificators);
         victim.setHp(victim.getHp() - Math.round(hp));
         if (victim.getHp() <= 0) {

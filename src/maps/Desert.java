@@ -1,6 +1,6 @@
-package com.LOOP.maps;
+package maps;
 
-import com.LOOP.helpers.GeneralConstants;
+import helpers.GeneralConstants;
 
 public class Desert extends Map {
     private Map desert;

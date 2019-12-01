@@ -1,7 +1,7 @@
-package com.LOOP.heroes;
+package heroes;
 
-import com.LOOP.helpers.*;
-import com.LOOP.maps.Map;
+import helpers.*;
+import maps.Map;
 
 public class Knight extends Hero implements Modificator {
     private Hero knight;
@@ -11,7 +11,7 @@ public class Knight extends Hero implements Modificator {
     }
 
     public Knight(Hero knight, int[] position) {
-        super(GeneralConstants.INITIAL_HP_KNIGHT, position);
+        super(GeneralConstants.INITIAL_HP_KNIGHT, position, "Knight");
         this.knight = knight;
     }
 
@@ -42,6 +42,10 @@ public class Knight extends Hero implements Modificator {
         if (victim.getHp() < victim.getMaximumHp() * Math.min(KnightConstants.INITIAL_HP_LIMIT +
                 KnightConstants.ADDED_HP_LIMIT * aggressor.getLevel(), KnightConstants.
                 MAXIMUM_HP_LIMIT)) {
+            if (victim instanceof Wizard) {
+                ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(victim.
+                        getHp()));
+            }
             victim.setHp(0);
             int xp = aggressor.getXp();
             xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
@@ -57,6 +61,9 @@ public class Knight extends Hero implements Modificator {
         if (area.getType().equals("Land")) {
             hp = hp * area.getModificator();
         }
+        if (victim instanceof Wizard) {
+            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+        }
         float[] modificators = {Rogue.Constants.MODIFICATOR_EXECUTE, Knight.Constants.
                 MODIFICATOR_EXECUTE, Pyromancer.Constants.MODIFICATOR_EXECUTE, Wizard.Constants.
                 MODIFICATOR_EXECUTE};
@@ -71,6 +78,9 @@ public class Knight extends Hero implements Modificator {
                 * aggressor.getLevel();
         if (area.getType().equals("Volcanic")) {
             hp = hp * area.getModificator();
+        }
+        if (victim instanceof Wizard) {
+            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Rogue.Constants.MODIFICATOR_SLAM, Knight.Constants.
                 MODIFICATOR_SLAM, Pyromancer.Constants.MODIFICATOR_SLAM, Wizard.Constants.

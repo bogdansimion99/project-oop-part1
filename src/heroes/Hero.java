@@ -1,7 +1,7 @@
-package com.LOOP.heroes;
+package heroes;
 
-import com.LOOP.helpers.ModificatorVisitor;
-import com.LOOP.maps.Map;
+import helpers.ModificatorVisitor;
+import maps.Map;
 
 public class Hero {
     private int hp;
@@ -13,6 +13,7 @@ public class Hero {
     private int damageOvertime;
     // for Drain and Execute
     private int maximumHp;
+    private String type;
 
     /**
      * @return
@@ -98,12 +99,32 @@ public class Hero {
         this.damageOvertime = damageOvertime;
     }
 
+    /**
+     * @return
+     */
     public int getMaximumHp() {
         return maximumHp;
     }
 
+    /**
+     * @param maximumHp
+     */
     public void setMaximumHp(int maximumHp) {
         this.maximumHp = maximumHp;
+    }
+
+    /**
+     * @return
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Hero() {
@@ -114,9 +135,10 @@ public class Hero {
         this.overtime = 0;
         this.damageOvertime = 0;
         this.maximumHp = 0;
+        this.type = "";
     }
 
-    public Hero(final int hp, final int[] position) {
+    public Hero(final int hp, final int[] position, final String type) {
         this.hp = hp;
         this.xp = 0;
         this.level = 0;
@@ -124,6 +146,7 @@ public class Hero {
         this.overtime = 0;
         this.damageOvertime = 0;
         this.maximumHp = hp;
+        this.type = type;
     }
 
     public void levelUp(final Hero player) {
