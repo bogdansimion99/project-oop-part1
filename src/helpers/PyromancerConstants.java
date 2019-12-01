@@ -1,4 +1,4 @@
-package com.LOOP.helpers;
+package helpers;
 
 public final class PyromancerConstants {
     public static final int BASE_DAMAGE_FIREBLAST = 300;

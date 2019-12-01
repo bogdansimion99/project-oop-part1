@@ -6,25 +6,37 @@ public class Map {
     private static Map instance = null;
 
     public static Map getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new Map();
         }
         return instance;
     }
 
+    /**
+     * @return
+     */
     public float getModificator() {
         return modificator;
     }
 
-    public void setModificator(float modificator) {
+    /**
+     * @param modificator
+     */
+    public void setModificator(final float modificator) {
         this.modificator = modificator;
     }
 
+    /**
+     * @return
+     */
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    /**
+     * @param type
+     */
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -33,7 +45,7 @@ public class Map {
         this.type = "";
     }
 
-    public Map(float modificator, String type) {
+    public Map(final float modificator, final String type) {
         this.modificator = modificator;
         this.type = type;
     }

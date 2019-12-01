@@ -1,4 +1,4 @@
-package com.LOOP.helpers;
+package helpers;
 
 public final class GeneralConstants {
     public static final float VOLCANIC_MODIFICATOR = 1.25f;
@@ -13,4 +13,9 @@ public final class GeneralConstants {
     public static final int ADDED_HP_KNIGHT = 80;
     public static final int ADDED_HP_WIZARD = 30;
     public static final int ADDED_HP_ROGUE = 40;
+    public static final int LIMIT_LEVEL1 = 300;
+    public static final int LIMIT_LEVEL0 = 250;
+    public static final int LIMIT_LEVEL_UPGRADE = 50;
+    public static final int STANDARD_ADDED_XP = 200;
+    public static final int MODIFIED_ADDED_XP = 40;
 }

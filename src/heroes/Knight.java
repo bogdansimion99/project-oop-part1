@@ -6,11 +6,14 @@ import maps.Map;
 public class Knight extends Hero implements Modificator {
     private Hero knight;
 
+    /**
+     * @return
+     */
     public Hero getKnight() {
         return knight;
     }
 
-    public Knight(Hero knight, int[] position) {
+    public Knight(final Hero knight, final int[] position) {
         super(GeneralConstants.INITIAL_HP_KNIGHT, position, "Knight");
         this.knight = knight;
     }
@@ -26,33 +29,50 @@ public class Knight extends Hero implements Modificator {
         public static final float MODIFICATOR_PARALYSIS = 0.8f;
     }
 
+    /**
+     * @param modificatorVisitor
+     * @param modificators
+     * @return
+     */
     @Override
-    public float accept(final ModificatorVisitor modificatorVisitor, float[] modificators) {
+    public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
         return modificatorVisitor.visit(this, modificators);
     }
 
+    /**
+     * @param aggressor
+     * @param victim
+     * @param area
+     */
     @Override
-    public void action (final Hero aggressor, final Hero victim, final Map area) {
+    public void action(final Hero aggressor, final Hero victim, final Map area) {
         execute(aggressor, victim, area);
         slam(aggressor, victim, area);
     }
 
-    public void execute (final Hero aggressor, final Hero victim, final Map area) {
+    /**
+     * @param aggressor
+     * @param victim
+     * @param area
+     */
+    public void execute(final Hero aggressor, final Hero victim, final Map area) {
         // Trebuie sa fac acea limita
-        if (victim.getHp() < victim.getMaximumHp() * Math.min(KnightConstants.INITIAL_HP_LIMIT +
-                KnightConstants.ADDED_HP_LIMIT * aggressor.getLevel(), KnightConstants.
+        if (victim.getHp() < victim.getMaximumHp() * Math.min(KnightConstants.INITIAL_HP_LIMIT
+                + KnightConstants.ADDED_HP_LIMIT * aggressor.getLevel(), KnightConstants.
                 MAXIMUM_HP_LIMIT)) {
+            // trebuie sa rezolv instanceof
             if (victim instanceof Wizard) {
-                ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(victim.
+                ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(victim.
                         getHp()));
             }
             victim.setHp(0);
             int xp = aggressor.getXp();
-            xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
+            xp = xp + Math.max(0, GeneralConstants.STANDARD_ADDED_XP - (aggressor.getLevel()
+                    - victim.getLevel()) * GeneralConstants.MODIFIED_ADDED_XP);
             aggressor.setXp(xp);
             levelUp(aggressor);
-            aggressor.setHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel() *
-                    GeneralConstants.ADDED_HP_KNIGHT);
+            aggressor.setHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel()
+                    * GeneralConstants.ADDED_HP_KNIGHT);
             return;
         }
         float hp = 0;
@@ -62,7 +82,7 @@ public class Knight extends Hero implements Modificator {
             hp = hp * area.getModificator();
         }
         if (victim instanceof Wizard) {
-            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+            ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Rogue.Constants.MODIFICATOR_EXECUTE, Knight.Constants.
                 MODIFICATOR_EXECUTE, Pyromancer.Constants.MODIFICATOR_EXECUTE, Wizard.Constants.
@@ -71,16 +91,21 @@ public class Knight extends Hero implements Modificator {
         victim.setHp(victim.getHp() - Math.round(hp));
     }
 
-    public void slam (final Hero aggressor, final Hero victim, final Map area) {
+    /**
+     * @param aggressor
+     * @param victim
+     * @param area
+     */
+    public void slam(final Hero aggressor, final Hero victim, final Map area) {
         // Trebuie sa fac incapacitatea adversarului de a se misca
         float hp = 0;
         hp = KnightConstants.BASE_DAMAGE_SLAM + KnightConstants.ADDED_DAMAGE_SLAM
                 * aggressor.getLevel();
-        if (area.getType().equals("Volcanic")) {
+        if (area.getType().equals("Land")) {
             hp = hp * area.getModificator();
         }
         if (victim instanceof Wizard) {
-            ((Wizard)victim).setDamage(((Wizard)victim).getDamage() + Math.round(hp));
+            ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Rogue.Constants.MODIFICATOR_SLAM, Knight.Constants.
                 MODIFICATOR_SLAM, Pyromancer.Constants.MODIFICATOR_SLAM, Wizard.Constants.
@@ -89,14 +114,21 @@ public class Knight extends Hero implements Modificator {
         victim.setOvertime(KnightConstants.NO_ROUND_PARALYSIS);
         victim.setDamageOvertime(0);
         victim.setHp(victim.getHp() - Math.round(hp));
-        if(victim.getHp() <= 0) {
+        if (victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();
-            xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
+            xp = xp + Math.max(0, GeneralConstants.STANDARD_ADDED_XP - (aggressor.getLevel()
+                    - victim.getLevel()) * GeneralConstants.MODIFIED_ADDED_XP);
             aggressor.setXp(xp);
             levelUp(aggressor);
-            aggressor.setHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel() *
-                    GeneralConstants.ADDED_HP_KNIGHT);
+            int level = aggressor.getLevel();
+            levelUp(aggressor);
+            if (aggressor.getLevel() != level) {
+                aggressor.setHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel()
+                        * GeneralConstants.ADDED_HP_KNIGHT);
+                aggressor.setMaximumHp(GeneralConstants.INITIAL_HP_KNIGHT + aggressor.getLevel()
+                        * GeneralConstants.ADDED_HP_KNIGHT);
+            }
         }
     }
 }

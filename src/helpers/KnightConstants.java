@@ -1,6 +1,6 @@
-package com.LOOP.helpers;
+package helpers;
 
-public class KnightConstants {
+public final class KnightConstants {
     public static final int BASE_DAMAGE_EXECUTE = 200;
     public static final int ADDED_DAMAGE_EXECUTE = 30;
     public static final int BASE_DAMAGE_SLAM = 100;

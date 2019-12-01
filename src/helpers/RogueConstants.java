@@ -1,6 +1,6 @@
-package com.LOOP.helpers;
+package helpers;
 
-public class RogueConstants {
+public final class RogueConstants {
     public static final int INITIAL_DAMAGE_BACKSTAB = 200;
     public static final int ADDED_DAMAGE_BACKSTAB = 20;
     public static final float CRITICAL = 1.5f;

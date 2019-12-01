@@ -1,26 +1,35 @@
-package com.LOOP.heroes;
+package heroes;
 
-import com.LOOP.helpers.*;
-import com.LOOP.maps.Map;
+import helpers.*;
+import maps.Map;
 
 public class Wizard extends Hero implements Modificator {
     private Hero wizard;
     private int damage;
 
+    /**
+     * @return
+     */
     public Hero getWizard() {
         return wizard;
     }
 
+    /**
+     * @return
+     */
     public int getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    /**
+     * @param damage
+     */
+    public void setDamage(final int damage) {
         this.damage = damage;
     }
 
-    public Wizard(Hero wizard, int[] position) {
-        super(GeneralConstants.INITIAL_HP_WIZARD, position);
+    public Wizard(final Hero wizard, final int[] position) {
+        super(GeneralConstants.INITIAL_HP_WIZARD, position, "Wizard");
         this.wizard = wizard;
         this.damage = 0;
     }
@@ -36,21 +45,36 @@ public class Wizard extends Hero implements Modificator {
         public static final float MODIFICATOR_PARALYSIS = 1.25f;
     }
 
+    /**
+     * @param modificatorVisitor
+     * @param modificators
+     * @return
+     */
     @Override
-    public float accept(final ModificatorVisitor modificatorVisitor, float[] modificators) {
+    public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
         return modificatorVisitor.visit(this, modificators);
     }
 
+    /**
+     * @param aggressor
+     * @param victim
+     * @param area
+     */
     @Override
     public void action(final Hero aggressor, final Hero victim, final Map area) {
         drain(aggressor, victim, area);
         deflect(aggressor, victim, area);
     }
 
+    /**
+     * @param aggressor
+     * @param victim
+     * @param area
+     */
     public void drain(final Hero aggressor, final Hero victim, final Map area) {
         float hp = Math.min(0.3f * victim.getMaximumHp(), victim.getHp());
-        float procent = WizardConstants.INITIAL_DAMAGE_DRAIN + WizardConstants.ADDED_DAMAGE_DRAIN *
-                aggressor.getLevel();
+        float procent = WizardConstants.INITIAL_DAMAGE_DRAIN + WizardConstants.ADDED_DAMAGE_DRAIN
+                * aggressor.getLevel();
         float[] modificators = {Rogue.Constants.MODIFICATOR_DRAIN, Knight.Constants.
                 MODIFICATOR_DRAIN, Pyromancer.Constants.MODIFICATOR_DRAIN, Constants.
                 MODIFICATOR_DRAIN};
@@ -62,10 +86,17 @@ public class Wizard extends Hero implements Modificator {
         victim.setHp(victim.getHp() - Math.round(hp));
     }
 
+    /**
+     * @param aggressor
+     * @param victim
+     * @param area
+     */
     public void deflect(final Hero aggressor, final Hero victim, final Map area) {
-        float hp = ((Wizard)aggressor).damage;
-        float procent = Math.min(WizardConstants.INITIAL_DAMAGE_DEFLECT + WizardConstants.ADDED_DAMAGE_DEFLECT
-                * aggressor.getLevel(), WizardConstants.MAXIMUM_DAMAGE_DEFLECT);
+        float hp = ((Wizard) aggressor).damage;
+        ((Wizard) aggressor).damage = 0;
+        float procent = Math.min(WizardConstants.INITIAL_DAMAGE_DEFLECT + WizardConstants.
+                ADDED_DAMAGE_DEFLECT * aggressor.getLevel(), WizardConstants.
+                MAXIMUM_DAMAGE_DEFLECT);
         hp = hp * procent;
         if (area.getType().equals("Desert")) {
             hp = hp * GeneralConstants.DESERT_MODIFICATOR;
@@ -78,14 +109,16 @@ public class Wizard extends Hero implements Modificator {
         if (victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();
-            xp = xp + Math.max(0, 200 - (aggressor.getLevel() - victim.getLevel()) * 40);
+            xp = xp + Math.max(0, GeneralConstants.STANDARD_ADDED_XP - (aggressor.getLevel()
+                    - victim.getLevel()) * GeneralConstants.MODIFIED_ADDED_XP);
             aggressor.setXp(xp);
             int level = aggressor.getLevel();
             levelUp(aggressor);
             if (aggressor.getLevel() != level) {
-                aggressor.setHp(GeneralConstants.INITIAL_HP_WIZARD + aggressor.getLevel() * 50);
-                aggressor.setMaximumHp(GeneralConstants.INITIAL_HP_WIZARD + aggressor.getLevel() *
-                        50);
+                aggressor.setHp(GeneralConstants.INITIAL_HP_WIZARD + aggressor.getLevel()
+                        * GeneralConstants.ADDED_HP_WIZARD);
+                aggressor.setMaximumHp(GeneralConstants.INITIAL_HP_WIZARD + aggressor.getLevel()
+                        * GeneralConstants.ADDED_HP_WIZARD);
             }
         }
     }

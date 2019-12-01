@@ -1,13 +1,13 @@
-package com.LOOP.helpers;
+package helpers;
 
-import com.LOOP.heroes.Knight;
-import com.LOOP.heroes.Pyromancer;
-import com.LOOP.heroes.Rogue;
-import com.LOOP.heroes.Wizard;
+import heroes.Knight;
+import heroes.Pyromancer;
+import heroes.Rogue;
+import heroes.Wizard;
 
 public interface ModificatorVisitor {
-    public float visit(Pyromancer pyromancer, float[] modificators);
-    public float visit(Knight knight, float[] modificators);
-    public float visit(Rogue rogue, float[] modificators);
-    public float visit(Wizard wizard, float[] modificators);
+    float visit(Pyromancer pyromancer, float[] modificators);
+    float visit(Knight knight, float[] modificators);
+    float visit(Rogue rogue, float[] modificators);
+    float visit(Wizard wizard, float[] modificators);
 }

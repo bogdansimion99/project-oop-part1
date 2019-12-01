@@ -1,6 +1,6 @@
-package com.LOOP.helpers;
+package helpers;
 
-public class WizardConstants {
+public final class WizardConstants {
     public static final float INITIAL_DAMAGE_DRAIN = 0.2f;
     public static final float ADDED_DAMAGE_DRAIN = 0.05f;
     public static final float INITIAL_DAMAGE_DEFLECT = 0.35f;

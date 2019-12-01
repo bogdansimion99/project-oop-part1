@@ -1,5 +1,6 @@
 package heroes;
 
+import helpers.GeneralConstants;
 import helpers.ModificatorVisitor;
 import maps.Map;
 
@@ -81,7 +82,7 @@ public class Hero {
     /**
      * @param overtime
      */
-    public void setOvertime(int overtime) {
+    public void setOvertime(final int overtime) {
         this.overtime = overtime;
     }
 
@@ -95,7 +96,7 @@ public class Hero {
     /**
      * @param damageOvertime
      */
-    public void setDamageOvertime(int damageOvertime) {
+    public void setDamageOvertime(final int damageOvertime) {
         this.damageOvertime = damageOvertime;
     }
 
@@ -109,7 +110,7 @@ public class Hero {
     /**
      * @param maximumHp
      */
-    public void setMaximumHp(int maximumHp) {
+    public void setMaximumHp(final int maximumHp) {
         this.maximumHp = maximumHp;
     }
 
@@ -123,7 +124,7 @@ public class Hero {
     /**
      * @param type
      */
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -149,19 +150,28 @@ public class Hero {
         this.type = type;
     }
 
+    /**
+     * @param player
+     */
     public void levelUp(final Hero player) {
-        if (player.xp < 300) {
+        if (player.xp < GeneralConstants.LIMIT_LEVEL1) {
             player.level = 0;
         } else {
-            player.level = (player.hp - 250) / 50;
+            player.level = (player.hp - GeneralConstants.LIMIT_LEVEL0) / GeneralConstants.
+                    LIMIT_LEVEL_UPGRADE;
         }
     }
 
-    public void action (final Hero aggressor, final Hero victim, final Map area) {
+    public void action(final Hero aggressor, final Hero victim, final Map area) {
 
     }
 
-    public float accept (final ModificatorVisitor modificatorVisitor, float[] modificators) {
+    /**
+     * @param modificatorVisitor
+     * @param modificators
+     * @return
+     */
+    public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
         return 0.0f;
     }
 }
