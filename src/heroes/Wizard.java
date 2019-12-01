@@ -48,7 +48,8 @@ public class Wizard extends Hero implements Modificator {
     /**
      * @param modificatorVisitor
      * @param modificators
-     * @return
+     * @return face legatura cu metoda visit implementata in Append si mentionata
+     * in ModificatorVisitor.
      */
     @Override
     public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
@@ -56,14 +57,17 @@ public class Wizard extends Hero implements Modificator {
     }
 
     /**
-     * @param aggressor
-     * @param victim
-     * @param area
+     * @param aggressor cel care da damage
+     * @param victim cel care isi ia damage
+     * @param area terenul pe care se desfasoara jocul
+     * Aceasta metoda apeleaza metodele specifice jucatorului de tip Wizard.
+     * La final se calculeaza xp-ul aggresorului (cel care da damage).
      */
     @Override
     public void action(final Hero aggressor, final Hero victim, final Map area) {
         drain(aggressor, victim, area);
         deflect(aggressor, victim, area);
+        calculateXp(aggressor, victim);
     }
 
     /**
@@ -106,6 +110,14 @@ public class Wizard extends Hero implements Modificator {
                 MODIFICATOR_DEFLECT};
         hp = hp * victim.accept(new Append(), modificators);
         victim.setHp(victim.getHp() - Math.round(hp));
+    }
+
+    /**
+     * @param aggressor
+     * @param victim
+     * Modifica nivelul jucatorului doar daca victima a murit.
+     */
+    public void calculateXp(final Hero aggressor, final Hero victim) {
         if (victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();

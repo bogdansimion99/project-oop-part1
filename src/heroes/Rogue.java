@@ -48,7 +48,8 @@ public class Rogue extends Hero implements Modificator {
     /**
      * @param modificatorVisitor
      * @param modificators
-     * @return
+     * @return face legatura cu metoda visit implementata in Append si mentionata
+     * in ModificatorVisitor.
      */
     @Override
     public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
@@ -56,14 +57,17 @@ public class Rogue extends Hero implements Modificator {
     }
 
     /**
-     * @param aggressor
-     * @param victim
-     * @param area
+     * @param aggressor cel care da damage
+     * @param victim cel care isi ia damage
+     * @param area terenul pe care se desfasoara jocul
+     * Aceasta metoda apeleaza metodele specifice jucatorului de tip Rogue.
+     * La final se calculeaza xp-ul aggresorului (cel care da damage).
      */
     @Override
     public void action(final Hero aggressor, final Hero victim, final Map area) {
         backstab(aggressor, victim, area);
         paralysis(aggressor, victim, area);
+        calculateXp(aggressor, victim);
     }
 
     /**
@@ -72,7 +76,6 @@ public class Rogue extends Hero implements Modificator {
      * @param area
      */
     public void backstab(final Hero aggressor, final Hero victim, final Map area) {
-        //trebuie sa vad daca si cand sa fac critical
         float hp = RogueConstants.INITIAL_DAMAGE_BACKSTAB + RogueConstants.ADDED_DAMAGE_BACKSTAB
                 * aggressor.getLevel();
         if ((((Rogue) aggressor).critical - 1) % 3 == 0 && area.getType().equals("Woods")) {
@@ -82,7 +85,7 @@ public class Rogue extends Hero implements Modificator {
         if (area.getType().equals("Woods")) {
             hp = hp * GeneralConstants.WOODS_MODIFICATOR;
         }
-        if (victim instanceof Wizard) {
+        if (victim.getType().equals("Wizard")) {
             ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Constants.MODIFICATOR_BACKSTAB, Knight.Constants.
@@ -98,7 +101,6 @@ public class Rogue extends Hero implements Modificator {
      * @param area
      */
     public void paralysis(final Hero aggressor, final Hero victim, final Map area) {
-        //trebuie sa vad incapacitatea adversarului + nr runde
         float hp = RogueConstants.INITIAL_DAMAGE_PARALYSIS + RogueConstants.ADDED_DAMAGE_PARALYSIS
                 * aggressor.getLevel();
         if (area.getType().equals("Woods")) {
@@ -106,7 +108,7 @@ public class Rogue extends Hero implements Modificator {
             victim.setOvertime(RogueConstants.OVERTIME_PARALYSIS_WOODS);
         }
         victim.setOvertime(RogueConstants.OVERTIME_PARALYSIS);
-        if (victim instanceof Wizard) {
+        if (victim.getType().equals("Wizard")) {
             ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Constants.MODIFICATOR_PARALYSIS, Knight.Constants.
@@ -114,6 +116,15 @@ public class Rogue extends Hero implements Modificator {
                 MODIFICATOR_PARALYSIS};
         hp = hp * victim.accept(new Append(), modificators);
         victim.setHp(victim.getHp() - Math.round(hp));
+        victim.setDamageOvertime(Math.round(hp));
+    }
+
+    /**
+     * @param aggressor
+     * @param victim
+     * Modifica nivelul jucatorului doar daca victima a murit.
+     */
+    public void calculateXp(final Hero aggressor, final Hero victim) {
         if (victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();

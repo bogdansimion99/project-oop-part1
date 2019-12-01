@@ -32,7 +32,8 @@ public class Knight extends Hero implements Modificator {
     /**
      * @param modificatorVisitor
      * @param modificators
-     * @return
+     * @return face legatura cu metoda visit implementata in Append si mentionata
+     * in ModificatorVisitor.
      */
     @Override
     public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
@@ -40,14 +41,17 @@ public class Knight extends Hero implements Modificator {
     }
 
     /**
-     * @param aggressor
-     * @param victim
-     * @param area
+     * @param aggressor cel care da damage
+     * @param victim cel care isi ia damage
+     * @param area terenul pe care se desfasoara jocul
+     * Aceasta metoda apeleaza metodele specifice jucatorului de tip Knight.
+     * La final se calculeaza xp-ul aggresorului (cel care da damage).
      */
     @Override
     public void action(final Hero aggressor, final Hero victim, final Map area) {
         execute(aggressor, victim, area);
         slam(aggressor, victim, area);
+        calculateXp(aggressor, victim);
     }
 
     /**
@@ -61,7 +65,7 @@ public class Knight extends Hero implements Modificator {
                 + KnightConstants.ADDED_HP_LIMIT * aggressor.getLevel(), KnightConstants.
                 MAXIMUM_HP_LIMIT)) {
             // trebuie sa rezolv instanceof
-            if (victim instanceof Wizard) {
+            if (victim.getType().equals("Wizard")) {
                 ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(victim.
                         getHp()));
             }
@@ -81,7 +85,7 @@ public class Knight extends Hero implements Modificator {
         if (area.getType().equals("Land")) {
             hp = hp * area.getModificator();
         }
-        if (victim instanceof Wizard) {
+        if (victim.getType().equals("Wizard")) {
             ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Rogue.Constants.MODIFICATOR_EXECUTE, Knight.Constants.
@@ -97,14 +101,13 @@ public class Knight extends Hero implements Modificator {
      * @param area
      */
     public void slam(final Hero aggressor, final Hero victim, final Map area) {
-        // Trebuie sa fac incapacitatea adversarului de a se misca
         float hp = 0;
         hp = KnightConstants.BASE_DAMAGE_SLAM + KnightConstants.ADDED_DAMAGE_SLAM
                 * aggressor.getLevel();
         if (area.getType().equals("Land")) {
             hp = hp * area.getModificator();
         }
-        if (victim instanceof Wizard) {
+        if (victim.getType().equals("Wizard")) {
             ((Wizard) victim).setDamage(((Wizard) victim).getDamage() + Math.round(hp));
         }
         float[] modificators = {Rogue.Constants.MODIFICATOR_SLAM, Knight.Constants.
@@ -114,13 +117,20 @@ public class Knight extends Hero implements Modificator {
         victim.setOvertime(KnightConstants.NO_ROUND_PARALYSIS);
         victim.setDamageOvertime(0);
         victim.setHp(victim.getHp() - Math.round(hp));
+    }
+
+    /**
+     * @param aggressor
+     * @param victim
+     * Modifica nivelul jucatorului doar daca victima a murit.
+     */
+    public void calculateXp(final Hero aggressor, final Hero victim) {
         if (victim.getHp() <= 0) {
             victim.setHp(0);
             int xp = aggressor.getXp();
             xp = xp + Math.max(0, GeneralConstants.STANDARD_ADDED_XP - (aggressor.getLevel()
                     - victim.getLevel()) * GeneralConstants.MODIFIED_ADDED_XP);
             aggressor.setXp(xp);
-            levelUp(aggressor);
             int level = aggressor.getLevel();
             levelUp(aggressor);
             if (aggressor.getLevel() != level) {

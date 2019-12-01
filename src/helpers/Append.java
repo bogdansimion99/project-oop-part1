@@ -9,7 +9,8 @@ public class Append implements ModificatorVisitor {
     /**
      * @param pyromancer
      * @param modifcators
-     * @return
+     * @return modificatorul specific jucatorului de tip Pyromancer pentru
+     * abilitatea specifica
      */
     @Override
     public float visit(final Pyromancer pyromancer, final float[] modifcators) {
@@ -19,7 +20,8 @@ public class Append implements ModificatorVisitor {
     /**
      * @param knight
      * @param modificators
-     * @return
+     * @return modificatorul specific jucatorului de tip Knight pentru
+     * abilitatea specifica
      */
     @Override
     public float visit(final Knight knight, final float[] modificators) {
@@ -29,7 +31,8 @@ public class Append implements ModificatorVisitor {
     /**
      * @param rogue
      * @param modificators
-     * @return
+     * @return modificatorul specific jucatorului de tip Rogue pentru
+     * abilitatea specifica
      */
     @Override
     public float visit(final Rogue rogue, final float[] modificators) {
@@ -39,7 +42,8 @@ public class Append implements ModificatorVisitor {
     /**
      * @param wizard
      * @param modificators
-     * @return
+     * @return modificatorul specific jucatorului de tip Wizard pentru
+     * abilitatea specifica
      */
     @Override
     public float visit(final Wizard wizard, final float[] modificators) {

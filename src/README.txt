@@ -15,7 +15,7 @@ reciproc abilitățile împotriva celuilalt. Înainte de a face această verific
 am aplicat vătămarea pentru abilitățile cu efect pe mai multe runde, dacă a
 existat într-o rundă anterioară.
 	În interiorul metodei action se află implementarea cea mai importantă din
-cod, astfel încât ea apelează 2 metode, diferite în funcție de tipul
+cod, astfel încât ea apelează 3 metode, diferite în funcție de tipul
 jucătorului. Mai departe, am implementat double-dispatch folosind design
 pattern-ul Visitor pentru a obține modificatorii de rasă. Astfel, am salvat
 într-un vector modificatorii, apelând metoda accept specifică fiecărui jucător

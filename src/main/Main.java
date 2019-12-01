@@ -12,8 +12,7 @@ public class Main {
 
     public static void main(final String[] args) throws IOException {
         FileSystem fs = new FileSystem(args[0], args[1]);
-        /*
-        FileSystem fs = new FileSystem("F:\\Documente_Bogdan\\Facultate\\POO\\teme-master\\teme\\" +
+        /*FileSystem fs = new FileSystem("F:\\Documente_Bogdan\\Facultate\\POO\\teme-master\\teme\\" +
                 "proiect-etapa1-league-of-oop\\checker\\LOOP\\src\\checker\\resources\\in\\" +
                 "fightKRD.in", "F:\\Documente_Bogdan\\Facultate\\POO\\teme-master\\teme\\" +
                 "proiect-etapa1-league-of-oop\\checker\\LOOP\\src\\out\\test.txt");*/
@@ -74,6 +73,9 @@ public class Main {
         }
         for (int i = 0; i < noRounds; i++) {
             for (int j = 0; j < noHeroes; j++) {
+                if (heroes.get(j).getHp() <= 0) {
+                    continue;
+                }
                 for (int k = j + 1; k < noHeroes; k++) {
                     if (Arrays.equals(heroes.get(j).getPosition(), heroes.get(k).getPosition())) {
                         if (heroes.get(j).getOvertime() > 0) {
@@ -85,6 +87,9 @@ public class Main {
                             heroes.get(k).setHp(heroes.get(k).getHp() - heroes.get(k).
                                     getDamageOvertime());
                             heroes.get(k).setOvertime(heroes.get(k).getOvertime() - 1);
+                        }
+                        if (heroes.get(k).getHp() <= 0) {
+                            continue;
                         }
                         heroes.get(j).action(heroes.get(j), heroes.get(k), map[heroes.get(j).
                                 getPosition()[0]][heroes.get(j).getPosition()[1]]);

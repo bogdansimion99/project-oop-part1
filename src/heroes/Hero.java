@@ -174,4 +174,8 @@ public class Hero {
     public float accept(final ModificatorVisitor modificatorVisitor, final float[] modificators) {
         return 0.0f;
     }
+
+    public void calculateXp(final Hero aggressor, final Hero victim) {
+
+    }
 }
