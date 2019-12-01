@@ -15,7 +15,7 @@ public class Main {
         /*
         FileSystem fs = new FileSystem("F:\\Documente_Bogdan\\Facultate\\POO\\teme-master\\teme\\" +
                 "proiect-etapa1-league-of-oop\\checker\\LOOP\\src\\checker\\resources\\in\\" +
-                "fightKPD.in", "F:\\Documente_Bogdan\\Facultate\\POO\\teme-master\\teme\\" +
+                "fightKRD.in", "F:\\Documente_Bogdan\\Facultate\\POO\\teme-master\\teme\\" +
                 "proiect-etapa1-league-of-oop\\checker\\LOOP\\src\\out\\test.txt");*/
         int rows = fs.nextInt();
         int columns = fs.nextInt();
@@ -68,8 +68,8 @@ public class Main {
             }
         }
         int noRounds = fs.nextInt();
-        String[] moves = new String[noHeroes];
-        for (int i = 0; i < noHeroes; i++) {
+        String[] moves = new String[noRounds];
+        for (int i = 0; i < noRounds; i++) {
             moves[i] = fs.nextWord();
         }
         for (int i = 0; i < noRounds; i++) {
@@ -94,7 +94,7 @@ public class Main {
                 }
             }
             for (int j = 0; j < noHeroes; j++) {
-                switch (moves[j].charAt(i)) {
+                switch (moves[i].charAt(j)) {
                     case 'U':
                         if (heroes.get(j).getOvertime() > 0) {
                             heroes.get(j).setPosition(new int[] {heroes.get(j).getPosition()[0] - 1,
