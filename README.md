@@ -1,6 +1,6 @@
-Simion Bogdan - Alexandru, 323CD
+# Project OOP Part 1
 
-	Programul ce vine la un loc cu acest readme este implementarea mea la jocul
+   Programul ce vine la un loc cu acest readme este implementarea mea la jocul
 MMO RPG League of OOP, fără interfață grafică, el făcând doar logica din spate.
 	Pentru acest lucru am avut nevoie de mai multe clase și pachete în care
 să-mi organizez codul. Menționez faptul că am explicat în javadoc-urile aferente
@@ -27,7 +27,3 @@ specifice interfețelor Modificator și, respectiv ModificatorVisitor.
 	După ce se termină toate rundele, dacă există un jucător care are viața mai
 mică sau egală cu zero, atunci el va fi declarat mort. Dacă nu, atunci i se va
 afișa statistica în fișierul de ieșire.
-	De asemenea, vreau să menționez câteva lucruri la final. Pe Vmchecker îmi
-arată că am -20 de puncte pe erorile de pe checkstyle, în ciuda faptului că eu
-am mai puțin de 30 de erori pe checkstyle, iar pe local îmi arată că am 0 puncte
-pe aceste erori.
